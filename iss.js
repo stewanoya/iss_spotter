@@ -11,8 +11,10 @@ const fetchMyIP = (callback) => {
       callback(Error(msg), null);
       return;
     }
-    const ip = JSON.parse(body);
+    let ip = JSON.parse(body);
+    ip = ip.ip;
     callback(null, ip);
+    return;
   });
 };
 
@@ -43,12 +45,12 @@ const fetchCoordsByIP = (ip, callback) => {
 
 const fetchISSFlyOverTimes = (coords, callback) => {
   request(
-    `https://iss-pass.herokuapp.com/json/?lat=${latLon.latitude}&lon=${latLon.longitude}`,
+    `https://iss-pass.herokuapp.com/json/?lat=${coords.latitude}&lon=${coords.longitude}`,
     (error, response, body) => {
       if (error) {
         return callback(error, null);
       }
-      const nextPasses = JSON.parse(body);
+      const nextPasses = JSON.parse(body).response;
       callback(nextPasses);
     }
   );
